@@ -1453,6 +1453,7 @@
                 $.error("missing input");
             }
             this.isActivated = false;
+            this.isDestroyed = false;
             this.autoselect = !!o.autoselect;
             this.minLength = _.isNumber(o.minLength) ? o.minLength : 1;
             this.$node = buildDom(o.input, o.withHint);
@@ -1490,28 +1491,46 @@
         }
         _.mixin(Typeahead.prototype, {
             _onSuggestionClicked: function onSuggestionClicked(type, $el) {
+                if (this.isDestroyed) {
+                    return;
+                }
                 var datum;
                 if (datum = this.dropdown.getDatumForSuggestion($el)) {
                     this._select(datum);
                 }
             },
             _onCursorMoved: function onCursorMoved() {
+                if (this.isDestroyed) {
+                    return;
+                }
                 var datum = this.dropdown.getDatumForCursor();
                 this.input.setInputValue(datum.value, true);
                 this.eventBus.trigger("cursorchanged", datum.raw, datum.datasetName);
             },
             _onCursorRemoved: function onCursorRemoved() {
+                if (this.isDestroyed) {
+                    return;
+                }
                 this.input.resetInputValue();
                 this._updateHint();
             },
             _onDatasetRendered: function onDatasetRendered() {
+                if (this.isDestroyed) {
+                    return;
+                }
                 this._updateHint();
             },
             _onOpened: function onOpened() {
+                if (this.isDestroyed) {
+                    return;
+                }
                 this._updateHint();
                 this.eventBus.trigger("opened");
             },
             _onClosed: function onClosed() {
+                if (this.isDestroyed) {
+                    return;
+                }
                 this.input.clearHint();
                 this.eventBus.trigger("closed");
             },
@@ -1640,6 +1659,7 @@
                 this.dropdown.destroy();
                 destroyDomStructure(this.$node);
                 this.$node = null;
+                this.isDestroyed = true;
             }
         });
         return Typeahead;
