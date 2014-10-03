@@ -143,6 +143,8 @@ var Dataset = (function() {
     },
 
     update: function update(query) {
+      if (!this.$el) { return; }
+
       var that = this;
 
       this.query = query;
@@ -163,12 +165,15 @@ var Dataset = (function() {
     },
 
     clear: function clear() {
+      if (!this.$el) { return; }
+
       this.cancel();
       this.$el.empty();
       this.trigger('rendered');
     },
 
     isEmpty: function isEmpty() {
+      if (!this.$el) { return true; }
       return this.$el.is(':empty');
     },
 
