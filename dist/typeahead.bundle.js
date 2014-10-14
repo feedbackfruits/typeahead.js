@@ -1059,9 +1059,11 @@
                 }
             },
             focus: function focus() {
+                if (!this.$input) return;
                 this.$input.focus();
             },
             blur: function blur() {
+                if (!this.$input) return;
                 this.$input.blur();
             },
             getQuery: function getQuery() {
@@ -1071,9 +1073,11 @@
                 this.query = query;
             },
             getInputValue: function getInputValue() {
+                if (!this.$input) return;
                 return this.$input.val();
             },
             setInputValue: function setInputValue(value, silent) {
+                if (!this.$input) return;
                 this.$input.val(value);
                 silent ? this.clearHint() : this._checkInputValue();
             },
